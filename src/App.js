@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
 import './App.css';
-import Sizes from './components/Sizes';
 import Products from './components/Products';
 import Cart from './components/Cart';
 import filterList from './components/filterList'
