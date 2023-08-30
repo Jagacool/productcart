@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './App.css';
-import Categories from './components/Categories';
 import Products from './components/Products';
 import Cart from './components/Cart';
 import filterList from './components/filterList'
@@ -9,41 +8,25 @@ import filterList from './components/filterList'
 const App = () => {
 
   const [products, setProducts] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
     setProducts(filterList([], null));
-    if(JSON.parse(localStorage.getItem("cart"))) {
+    if (JSON.parse(localStorage.getItem("cart"))) {
       setCart(JSON.parse(localStorage.getItem("cart")));
     }
   }, [])
 
-  const setCategorie = (newCategorie) => {
-    const CategorieCopy = [...selectedCategories];
-    
-    if(CategoriesCopy.includes(newCategorie)) {
-      const index = Categories.indexOf(Categorie);
-      Categories.splice(index, 1);
-    }
-    else {
-      Categories.push(Categorie);
-    }
-    setSelectedCategories(Categories);
-    setProducts(filterList(Categories, 'Categorie'));
-  }
-
   const sortProducts = (method) => {
     const array = products;
 
-    if(method === "Lowest to Highest") {
-        array.sort(function(a, b){
-          return a.price-b.price
+    if (method === "Lowest to Highest") {
+      array.sort(function (a, b) {
+        return a.price - b.price
       })
-    }
-    else if(method === "Highest to Lowest") {
-        array.sort(function(a, b){
-          return b.price-a.price
+    } else if (method === "Highest to Lowest") {
+      array.sort(function (a, b) {
+        return b.price - a.price
       })
     }
     setProducts(array);
@@ -51,7 +34,7 @@ const App = () => {
 
   const addToCart = (item) => {
     const productList = [...cart];
-    if(!productList.includes(item)) {
+    if (!productList.includes(item)) {
       productList.push(item);
     }
     const index = productList.indexOf(item);
@@ -63,25 +46,21 @@ const App = () => {
   const changeQuantity = (item, e) => {
     const productList = [...cart];
     const index = productList.indexOf(item);
-    if(e === '+') {
+    if (e === '+') {
       productList[index].quantity++;
-    }
-    else {
-      if(productList[index].quantity > 1) {
+    } else {
+      if (productList[index].quantity > 1) {
         productList[index].quantity--;
-      }
-      else {
+      } else {
         productList.splice(index, 1);
       }
-    } 
+    }
     setCart(productList);
     localStorage.setItem("cart", JSON.stringify(productList));
   }
-  
+
   return (
     <div className="App">
-      
-      <Categories selectedCategories={selectedCategories} setCategorie={setCategorie} />
       <Products products={products} sortProducts={sortProducts} addToCart={addToCart} />
       <Cart products={cart} changeQuantity={changeQuantity} />
     </div>
