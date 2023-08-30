@@ -19,10 +19,10 @@ const App = () => {
     }
   }, [])
 
-  const setCategorie = (Categorie) => {
-    const Categorie = [...selectedCategories];
+  const setCategorie = (newCategorie) => {
+    const CategorieCopy = [...selectedCategories];
     
-    if(Categories.includes(Categorie)) {
+    if(CategoriesCopy.includes(newCategorie)) {
       const index = Categories.indexOf(Categorie);
       Categories.splice(index, 1);
     }
