@@ -1,69 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
+
 import './App.css';
-import SmartphoneCategories from './components/SmartphoneCategories';
+import Sizes from './components/Sizes';
 import Products from './components/Products';
 import Cart from './components/Cart';
-import filterList from './components/filterList';
+import filterList from './components/filterList'
 
 const App = () => {
+
   const [products, setProducts] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
     setProducts(filterList([], null));
-    if (JSON.parse(localStorage.getItem('cart'))) {
-      setCart(JSON.parse(localStorage.getItem('cart')));
+    if(JSON.parse(localStorage.getItem("cart"))) {
+      setCart(JSON.parse(localStorage.getItem("cart")));
     }
-  }, []);
+  }, [])
 
-  const setCategory = (category) => {
-    const categories = [...selectedCategories];
-    if (categories.includes(category)) {
-      const index = categories.indexOf(category);
-      categories.splice(index, 1);
-    } else {
-      categories.push(category);
+  const setSize = (size) => {
+    const sizes = [...selectedSizes];
+    
+    if(sizes.includes(size)) {
+      const index = sizes.indexOf(size);
+      sizes.splice(index, 1);
     }
-    setSelectedCategories(categories);
-    setProducts(filterList(categories, 'category'));
-  };
+    else {
+      sizes.push(size);
+    }
+    setSelectedSizes(sizes);
+    setProducts(filterList(sizes, 'size'));
+  }
 
   const sortProducts = (method) => {
-    const array = [...products]; // Make a copy of the products array
+    const array = products;
 
-    if (method === 'Lowest to Highest') {
-      array.sort(function (a, b) {
-        return a.price - b.price;
-      });
-    } else if (method === 'Highest to Lowest') {
-      array.sort(function (a, b) {
-        return b.price - a.price;
-      });
+    if(method === "Lowest to Highest") {
+        array.sort(function(a, b){
+          return a.price-b.price
+      })
+    }
+    else if(method === "Highest to Lowest") {
+        array.sort(function(a, b){
+          return b.price-a.price
+      })
     }
     setProducts(array);
-  };
+  }
 
   const addToCart = (item) => {
     const productList = [...cart];
-    // Rest of your addToCart logic
-  };
+    if(!productList.includes(item)) {
+      productList.push(item);
+    }
+    const index = productList.indexOf(item);
+    productList[index].quantity++;
+    setCart(productList);
+    localStorage.setItem("cart", JSON.stringify(productList));
+  }
 
   const changeQuantity = (item, e) => {
     const productList = [...cart];
-    // Rest of your changeQuantity logic
-  };
-
+    const index = productList.indexOf(item);
+    if(e === '+') {
+      productList[index].quantity++;
+    }
+    else {
+      if(productList[index].quantity > 1) {
+        productList[index].quantity--;
+      }
+      else {
+        productList.splice(index, 1);
+      }
+    } 
+    setCart(productList);
+    localStorage.setItem("cart", JSON.stringify(productList));
+  }
+  
   return (
     <div className="App">
-      <SmartphoneCategories
-        selectedCategories={selectedCategories}
-        setCategory={setCategory}
-      />
+      
+      <Sizes selectedSizes={selectedSizes} setSize={setSize} />
       <Products products={products} sortProducts={sortProducts} addToCart={addToCart} />
       <Cart products={cart} changeQuantity={changeQuantity} />
     </div>
   );
-};
+}
 
 export default App;
