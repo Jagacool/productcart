@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 import './App.css';
-import Sizes from './components/Sizes';
+import Categories from './components/Categories';
 import Products from './components/Products';
 import Cart from './components/Cart';
 import filterList from './components/filterList'
@@ -9,7 +9,7 @@ import filterList from './components/filterList'
 const App = () => {
 
   const [products, setProducts] = useState([]);
-  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
@@ -19,18 +19,18 @@ const App = () => {
     }
   }, [])
 
-  const setSize = (size) => {
-    const sizes = [...selectedSizes];
+  const setCategorie = (Categorie) => {
+    const Categorie = [...selectedCategories];
     
-    if(sizes.includes(size)) {
-      const index = sizes.indexOf(size);
-      sizes.splice(index, 1);
+    if(Categories.includes(Categorie)) {
+      const index = Categories.indexOf(Categorie);
+      Categories.splice(index, 1);
     }
     else {
-      sizes.push(size);
+      Categories.push(Categorie);
     }
-    setSelectedSizes(sizes);
-    setProducts(filterList(sizes, 'size'));
+    setSelectedCategories(Categories);
+    setProducts(filterList(Categories, 'Categorie'));
   }
 
   const sortProducts = (method) => {
@@ -81,7 +81,7 @@ const App = () => {
   return (
     <div className="App">
       
-      <Sizes selectedSizes={selectedSizes} setSize={setSize} />
+      <Categories selectedCategories={selectedCategories} setCategorie={setCategorie} />
       <Products products={products} sortProducts={sortProducts} addToCart={addToCart} />
       <Cart products={cart} changeQuantity={changeQuantity} />
     </div>
